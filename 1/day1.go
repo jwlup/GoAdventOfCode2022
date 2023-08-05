@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -41,5 +42,5 @@ func main() {
 			max_per_elf = per_elf
 		}
 	}
-	println("%v,%v", max_per_elf, max_elf+1)
+	fmt.Printf("Calories by most caloried elf: %d, Most caloried elf: %d\n", max_per_elf, max_elf+1)
 }
