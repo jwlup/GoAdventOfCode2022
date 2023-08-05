@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -21,13 +22,16 @@ func score_round(round string) (int, error) {
 	if err != nil {
 		return -1, err
 	}
-	score += shape_score[actions[1]]
+	shape_score_round := shape_score["A"]
+	score += shape_score_round
 	return score, nil
 }
 
 func outcome_score(actions []string) (int, error) {
 	results := 0
 	your_shape := actions[1]
+	//outcome := [3]int{3, 6, 0}
+
 	switch actions[0] {
 	case "A":
 		if your_shape == "Y" {
@@ -69,5 +73,6 @@ func main() {
 		}
 		total_score += score
 	}
-	println(total_score)
+	fmt.Printf("Total Score (Part 1): %d", total_score)
+
 }
