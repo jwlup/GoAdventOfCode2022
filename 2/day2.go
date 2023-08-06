@@ -8,53 +8,44 @@ import (
 	"strings"
 )
 
+func circular_array(array [3]int, index int) int {
+	return (3 + index) % 3
+}
+
 func score_round(round string) (int, error) {
 	actions := strings.Split(round, " ")
 	if len(actions) != 2 {
 		return -1, errors.New("Not a valid round - expect exactly 2 actions")
 	}
-	shape_score := map[string]int{
-		"X": 1,
-		"Y": 2,
-		"Z": 3,
+	encode_your_shape := map[string]int{
+		"X": 0,
+		"Y": 1,
+		"Z": 2,
 	}
-	score, err := outcome_score(actions)
+	encode_opp_shape := map[string]int{
+		"A": 0,
+		"B": 1,
+		"C": 2,
+	}
+	action_codes := [2]int{encode_opp_shape[actions[0]], encode_your_shape[actions[1]]}
+	score, err := outcome_score_p1(action_codes)
 	if err != nil {
 		return -1, err
 	}
-	shape_score_round := shape_score["A"]
-	score += shape_score_round
+
 	return score, nil
 }
 
-func outcome_score(actions []string) (int, error) {
-	results := 0
-	your_shape := actions[1]
-	//outcome := [3]int{3, 6, 0}
-
-	switch actions[0] {
-	case "A":
-		if your_shape == "Y" {
-			results = 6
-		} else if your_shape == "X" {
-			results = 3
-		}
-	case "B":
-		if your_shape == "Z" {
-			results = 6
-		} else if your_shape == "Y" {
-			results = 3
-		}
-	case "C":
-		if your_shape == "X" {
-			results = 6
-		} else if your_shape == "Z" {
-			results = 3
-		}
-	default:
-		return -1, errors.New("Invalid action by opponent")
+func outcome_score_p1(actions [2]int) (int, error) {
+	your_action := actions[1]
+	opp_action := actions[0]
+	if your_action < 0 || your_action > 2 || opp_action < 0 || opp_action > 2 {
+		return -1, errors.New("Action Code out of Range")
 	}
-	return results, nil
+	outcome := [3]int{3, 6, 0}
+	outcome_index := circular_array(outcome, your_action-opp_action)
+	result := outcome[outcome_index]
+	return result + your_action + 1, nil
 }
 
 func main() {
